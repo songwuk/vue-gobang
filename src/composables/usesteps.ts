@@ -3,9 +3,16 @@
  *
  * ******
  */
-type posArr = [number, number]
 
-export const stepscenter = (x: number, y: number, length: number, steps: number): posArr => {
+import { posArr, stepscenteroptions,renderchessmanoptions } from "./types"
+
+export const stepscenter = (options: stepscenteroptions): posArr => {
+  const {
+    x,
+    y,
+    length,
+    steps
+  } = options
   const newSet = new Map()
   for (let i = 0; i < length; i++) {
     for (let j = 0; j < length; j++)
@@ -42,8 +49,36 @@ export const stepscenter = (x: number, y: number, length: number, steps: number)
   }
   return newSet.get(`${returnx}rect${returny}`)
 }
+export const renderchessman = (options: renderchessmanoptions) => {
+  const {
+    x,
+    y,
+    radius,
+    color,
+    ctx
+  } = options
+  ctx.beginPath()
+  const radialGradient = ctx.createRadialGradient(
+    radius,
+    radius,
+    radius - 2, // 外部圆心和半径
+    radius,
+    radius,
+    0 // 内部圆心和半径
+  );
+  // 判断棋子的类型，设置不同的渐变色
+  if (color === "black") {
+    radialGradient.addColorStop(0, "#0A0A0A");
+    radialGradient.addColorStop(1, "#636766");
+  } else {
+    radialGradient.addColorStop(0, "#D1D1D1");
+    radialGradient.addColorStop(1, "#F9F9F9");
+  }
+  ctx.fillStyle = radialGradient
+  ctx.fillRect(x - radius,y - radius, x + radius,y + radius);
+}
 /**
- * ******
+ * ****** win ******
  */
 export const howwinner = () => {
 
